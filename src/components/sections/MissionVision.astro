@@ -1,0 +1,64 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../ui/Reveal.astro';
+
+// Textos preservados del brief original.
+const mission = {
+  icon: 'target',
+  title: 'Misión',
+  paragraphs: [
+    'Suministrar Soluciones y Servicios que permitan a nuestros clientes alcanzar con seguridad sus objetivos de negocio.',
+    'Ser líderes en el mercado de la seguridad privada, distinguiéndose como una empresa integral, seria y profesional, que suministra soluciones y servicios de excelencia a nuestros clientes, manteniendo una relación cercana, satisfaciendo sus necesidades y protegiendo de la mejor manera sus empresas, familias e intereses, y contribuyendo positivamente a la sociedad.',
+    'Mantener el mejor servicio post-venta, de modo tal que nuestros clientes se mantengan permanentemente en contacto e informados de nuestro aporte en el normal desarrollo de sus actividades, mediante una comunicación fluida y la entrega permanente de informes de gestión.',
+  ],
+};
+
+const vision = {
+  icon: 'eye',
+  title: 'Visión',
+  paragraphs: [
+    'Watchman aspira a ser líder en el suministro de soluciones, asesorías, servicios y tecnologías de la seguridad privada, ayudando a construir el futuro para nuestros clientes y empleados.',
+  ],
+};
+
+const blocks = [mission, vision];
+---
+
+<section class="section-light py-24 lg:py-32 scroll-mt-20">
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Propósito</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4 text-fg-light-1">
+          Lo que nos mueve.
+        </h2>
+        <p class="text-body-lg text-fg-light-2 mt-5 max-w-2xl">
+          Una declaración clara de hacia dónde vamos y por qué hacemos lo que hacemos.
+        </p>
+      </Reveal>
+    </div>
+
+    <div class="mt-16 grid gap-8 lg:gap-12 lg:grid-cols-2">
+      {blocks.map((block, i) => (
+        <Reveal delay={i * 150}>
+          <article class="h-full pl-8 lg:pl-10 border-l-2 border-accent relative">
+            <div class="absolute -left-[1.05rem] top-0 flex items-center justify-center w-8 h-8 rounded-full bg-accent text-bg-dark">
+              <Icon name={`lucide:${block.icon}`} class="h-4 w-4" aria-hidden="true" />
+            </div>
+
+            <h3 class="text-eyebrow text-fg-light-3">{block.title}</h3>
+            <div class="mt-4 space-y-5">
+              {block.paragraphs.map((p, idx) => (
+                <p class={idx === 0 ? 'text-h3 text-fg-light-1 leading-snug font-semibold' : 'text-body-lg text-fg-light-2'}>
+                  {p}
+                </p>
+              ))}
+            </div>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

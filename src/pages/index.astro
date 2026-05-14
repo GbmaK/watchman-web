@@ -1,0 +1,39 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Navbar from '../components/layout/Navbar.astro';
+import Footer from '../components/layout/Footer.astro';
+import WhatsAppFAB from '../components/layout/WhatsAppFAB.astro';
+
+import Hero from '../components/sections/Hero.astro';
+import About from '../components/sections/About.astro';
+import Stats from '../components/sections/Stats.astro';
+import MissionVision from '../components/sections/MissionVision.astro';
+import Services from '../components/sections/Services.astro';
+import WhyUs from '../components/sections/WhyUs.astro';
+import Team from '../components/sections/Team.astro';
+import Coverage from '../components/sections/Coverage.astro';
+import Certifications from '../components/sections/Certifications.astro';
+import Clients from '../components/sections/Clients.astro';
+import Careers from '../components/sections/Careers.astro';
+import Contact from '../components/sections/Contact.astro';
+---
+
+<BaseLayout>
+  <Navbar slot="header" />
+
+  <Hero />
+  <About />
+  <Stats />
+  <MissionVision />
+  <Services />
+  <WhyUs />
+  <Team />
+  <Coverage />
+  <Certifications />
+  <Clients />
+  <Careers />
+  <Contact />
+
+  <Footer slot="footer" />
+  <WhatsAppFAB slot="fab" />
+</BaseLayout>

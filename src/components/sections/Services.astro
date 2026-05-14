@@ -1,0 +1,47 @@
+---
+import Reveal from '../ui/Reveal.astro';
+import ServiceCard from '../ui/ServiceCard.astro';
+import { services } from '../../data/services.ts';
+---
+
+<section id="servicios" class="section-dark relative overflow-hidden isolate py-24 lg:py-32 scroll-mt-20">
+  <!-- Background ambient -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 -z-10 opacity-50"
+    style="background: radial-gradient(ellipse 50% 40% at 100% 0%, rgba(212, 160, 23, 0.06), transparent 70%);"
+  ></div>
+
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Nuestros servicios</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4">
+          Cobertura integral, desde la seguridad física
+          <span class="text-accent"> hasta la inteligencia.</span>
+        </h2>
+      </Reveal>
+      <Reveal delay={240}>
+        <p class="text-body-lg text-fg-dark-2 mt-6 max-w-2xl">
+          Nueve líneas de servicio operadas por especialistas con formación nacional e internacional.
+          Cada solución se diseña a medida según el perfil de riesgo del cliente.
+        </p>
+      </Reveal>
+    </div>
+
+    <div class="mt-16 grid gap-5 lg:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      {services.map((service, i) => (
+        <Reveal delay={(i % 3) * 80 + Math.floor(i / 3) * 40}>
+          <ServiceCard
+            title={service.title}
+            description={service.description}
+            icon={service.icon}
+            index={i + 1}
+          />
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

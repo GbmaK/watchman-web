@@ -1,0 +1,42 @@
+---
+import Reveal from '../ui/Reveal.astro';
+import StatCard from '../ui/StatCard.astro';
+import { stats, statsSource } from '../../data/stats.ts';
+---
+
+<section class="section-dark relative overflow-hidden isolate py-24 lg:py-32">
+  <!-- Subtle background accents -->
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 -z-10 opacity-40"
+    style="background: radial-gradient(ellipse 60% 50% at 50% 100%, rgba(212, 160, 23, 0.06), transparent 70%);"
+  ></div>
+
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">El contexto</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4">
+          El riesgo es real.
+          <span class="block text-fg-dark-2">La respuesta debe serlo también.</span>
+        </h2>
+      </Reveal>
+    </div>
+
+    <div class="mt-14 lg:mt-16 grid gap-4 sm:gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-4">
+      {stats.map((stat, i) => (
+        <Reveal delay={i * 100}>
+          <StatCard {...stat} />
+        </Reveal>
+      ))}
+    </div>
+
+    <Reveal delay={500}>
+      <p class="mt-10 text-xs text-fg-dark-3 max-w-2xl leading-relaxed">
+        <span class="text-fg-dark-2 font-medium">Fuente:</span> {statsSource}
+      </p>
+    </Reveal>
+  </div>
+</section>

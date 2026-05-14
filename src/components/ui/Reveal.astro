@@ -1,0 +1,62 @@
+---
+/**
+ * Wrapper de animación on-scroll usando IntersectionObserver nativo.
+ * Aplica fade-in + translate-y al entrar en viewport. Zero deps.
+ * Respeta prefers-reduced-motion (CSS lo neutraliza).
+ *
+ * Uso: <Reveal delay={100}>...</Reveal>
+ */
+interface Props {
+  as?: string;
+  delay?: number;
+  threshold?: number;
+  class?: string;
+}
+
+const {
+  as: Tag = 'div',
+  delay = 0,
+  threshold = 0.15,
+  class: className = '',
+} = Astro.props;
+---
+
+<Tag
+  class:list={['reveal', className]}
+  data-reveal
+  data-reveal-delay={delay}
+  data-reveal-threshold={threshold}
+>
+  <slot />
+</Tag>
+
+<script>
+  const observe = () => {
+    const targets = document.querySelectorAll<HTMLElement>('[data-reveal]:not(.is-visible)');
+    if (!targets.length) return;
+
+    if (!('IntersectionObserver' in window)) {
+      targets.forEach((el) => el.classList.add('is-visible'));
+      return;
+    }
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        entries.forEach((entry) => {
+          if (entry.isIntersecting) {
+            const el = entry.target as HTMLElement;
+            const delay = Number(el.dataset.revealDelay ?? 0);
+            window.setTimeout(() => el.classList.add('is-visible'), delay);
+            io.unobserve(el);
+          }
+        });
+      },
+      { threshold: 0.15, rootMargin: '0px 0px -10% 0px' }
+    );
+
+    targets.forEach((el) => io.observe(el));
+  };
+
+  observe();
+  document.addEventListener('astro:page-load', observe);
+</script>

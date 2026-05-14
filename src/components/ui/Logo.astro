@@ -1,0 +1,37 @@
+---
+/**
+ * Logo tipográfico Watchman.
+ * Texto puro: WATCH (claro u oscuro según variant) + MAN (dorado).
+ * NO usa la silueta caricaturesca del original.
+ */
+interface Props {
+  variant?: 'light' | 'dark';
+  size?: 'sm' | 'md' | 'lg';
+  href?: string | null;
+  class?: string;
+}
+
+const { variant = 'light', size = 'md', href = '/', class: className = '' } = Astro.props;
+
+const sizes = {
+  sm: 'text-lg',
+  md: 'text-xl',
+  lg: 'text-2xl',
+};
+
+const watchColor =
+  variant === 'light' ? 'text-fg-dark-1' : 'text-fg-light-1';
+
+const sharedClass = `inline-flex items-center font-extrabold tracking-tight ${sizes[size]} ${className}`;
+const ariaLabel = 'Watchman Seguridad Integral — Inicio';
+---
+
+{href ? (
+  <a href={href} aria-label={ariaLabel} class={sharedClass}>
+    <span class={watchColor}>WATCH</span><span class="text-accent">MAN</span>
+  </a>
+) : (
+  <span aria-label={ariaLabel} class={sharedClass}>
+    <span class={watchColor}>WATCH</span><span class="text-accent">MAN</span>
+  </span>
+)}

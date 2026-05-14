@@ -1,0 +1,72 @@
+---
+import { Image } from 'astro:assets';
+import Reveal from '../ui/Reveal.astro';
+import { clients } from '../../data/clients.ts';
+---
+
+<section id="clientes" class="section-light py-24 lg:py-32 scroll-mt-20">
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Referencias</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4 text-fg-light-1">
+          Ellos confían en <span class="text-accent">Watchman</span>.
+        </h2>
+      </Reveal>
+      <Reveal delay={240}>
+        <p class="text-body-lg text-fg-light-2 mt-6 max-w-2xl">
+          Trabajamos con organizaciones del Estado, multinacionales y referentes nacionales en distintas industrias.
+        </p>
+      </Reveal>
+    </div>
+
+    <ul class="mt-16 grid gap-3 sm:gap-4 grid-cols-2 sm:grid-cols-3 lg:grid-cols-4">
+      {clients.map((client, i) => {
+        const isExternal = !!client.url;
+        const cellClass =
+          'group relative flex items-center justify-center h-28 sm:h-32 rounded-2xl border border-black/8 bg-white px-6 py-5 transition-all duration-300 hover:border-accent/40 hover:shadow-[0_10px_30px_-15px_rgba(10,11,13,0.18)] hover:-translate-y-0.5';
+        const imgClass =
+          'max-h-full max-w-full h-auto w-auto object-contain transition-all duration-300 grayscale opacity-60 group-hover:grayscale-0 group-hover:opacity-100 group-hover:scale-105';
+        return (
+          <Reveal delay={(i % 4) * 60}>
+            <li class="h-full">
+              {isExternal ? (
+                <a
+                  href={client.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  aria-label={`Visitar sitio de ${client.name}`}
+                  class={cellClass}
+                >
+                  <Image
+                    src={client.logo}
+                    alt={`Logo ${client.name}`}
+                    width={240}
+                    height={120}
+                    loading="lazy"
+                    decoding="async"
+                    class={imgClass}
+                  />
+                </a>
+              ) : (
+                <div class={cellClass} aria-label={client.name}>
+                  <Image
+                    src={client.logo}
+                    alt={`Logo ${client.name}`}
+                    width={240}
+                    height={120}
+                    loading="lazy"
+                    decoding="async"
+                    class={imgClass}
+                  />
+                </div>
+              )}
+            </li>
+          </Reveal>
+        );
+      })}
+    </ul>
+  </div>
+</section>

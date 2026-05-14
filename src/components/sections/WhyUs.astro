@@ -1,0 +1,58 @@
+---
+import Reveal from '../ui/Reveal.astro';
+import { site } from '../../data/site.ts';
+
+const yearsActive = new Date().getFullYear() - site.foundedYear;
+
+const pillars = [
+  {
+    title: 'Especialistas de élite',
+    description:
+      'Cuentan con los mejores especialistas del mercado nacional, graduados en el extranjero en diversas materias inherentes a la seguridad.',
+  },
+  {
+    title: 'Trayectoria comprobada',
+    description: `${yearsActive}+ años de experiencia trabajando con clientes multinacionales y referentes nacionales.`,
+  },
+  {
+    title: 'Servicio personalizado',
+    description:
+      'Cada cliente recibe una experiencia única, adaptada estrictamente a sus necesidades particulares.',
+  },
+];
+---
+
+<section class="section-light py-24 lg:py-32">
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Por qué Watchman</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4 text-fg-light-1">
+          Tres razones que nos distinguen
+          <span class="text-accent">en el mercado.</span>
+        </h2>
+      </Reveal>
+    </div>
+
+    <div class="mt-16 grid gap-12 md:gap-8 md:grid-cols-3">
+      {pillars.map((pillar, i) => (
+        <Reveal delay={i * 120}>
+          <article class="relative h-full md:pr-8 md:not-last:border-r md:not-last:border-black/8">
+            <span
+              class="block font-extrabold text-accent leading-none tracking-tight tabular-nums"
+              style="font-size: clamp(3.5rem, 8vw, 5.5rem);"
+            >
+              {String(i + 1).padStart(2, '0')}
+            </span>
+            <h3 class="mt-6 text-xl lg:text-2xl font-semibold text-fg-light-1 leading-snug">
+              {pillar.title}
+            </h3>
+            <p class="mt-3 text-body-lg text-fg-light-2 leading-7">{pillar.description}</p>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+  </div>
+</section>

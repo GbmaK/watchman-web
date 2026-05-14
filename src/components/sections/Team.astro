@@ -1,0 +1,66 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../ui/Reveal.astro';
+import { team } from '../../data/team.ts';
+---
+
+<section class="section-dark py-24 lg:py-32 relative overflow-hidden isolate">
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 -z-10 opacity-30"
+    style="background: radial-gradient(ellipse 40% 50% at 50% 0%, rgba(212, 160, 23, 0.05), transparent 70%);"
+  ></div>
+
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Liderazgo</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4">
+          Quienes están detrás
+          <span class="text-accent">de Watchman.</span>
+        </h2>
+      </Reveal>
+      <Reveal delay={240}>
+        <p class="text-body-lg text-fg-dark-2 mt-6 max-w-2xl">
+          Un equipo multidisciplinario de profesionales con formación nacional e internacional en las distintas áreas de la seguridad.
+        </p>
+      </Reveal>
+    </div>
+
+    <div class="mt-16 grid gap-6 grid-cols-1 sm:grid-cols-2 lg:grid-cols-3">
+      {team.map((member, i) => (
+        <Reveal delay={i * 120}>
+          <article
+            class="rounded-2xl border border-white/8 bg-white/[0.02] p-6 lg:p-8 h-full
+              border-dashed transition-colors duration-300 hover:border-accent/40"
+          >
+            <!-- Avatar placeholder -->
+            <div
+              class="w-20 h-20 rounded-full bg-bg-dark-elev border border-white/8 flex items-center justify-center text-fg-dark-3"
+              aria-hidden="true"
+            >
+              <Icon name="lucide:user" class="h-10 w-10" />
+            </div>
+
+            <p class="mt-6 text-[0.65rem] uppercase tracking-[0.15em] text-accent font-semibold">
+              Pendiente
+            </p>
+            <h3 class="mt-2 text-xl font-semibold text-fg-dark-1">{member.name}</h3>
+            <p class="text-sm text-fg-dark-3 mt-1">{member.role}</p>
+            <p class="mt-4 text-sm text-fg-dark-2 leading-7">{member.bio}</p>
+          </article>
+        </Reveal>
+      ))}
+    </div>
+
+    <!-- Aviso visible solo en dev / para el cliente -->
+    <Reveal delay={500}>
+      <p class="mt-10 text-xs text-fg-dark-3 inline-flex items-center gap-2">
+        <Icon name="lucide:info" class="h-3.5 w-3.5" aria-hidden="true" />
+        Sección pendiente de fotos y biografías reales del equipo.
+      </p>
+    </Reveal>
+  </div>
+</section>

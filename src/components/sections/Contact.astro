@@ -1,0 +1,96 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../ui/Reveal.astro';
+import ContactForm from '../ui/ContactForm.astro';
+import { site } from '../../data/site.ts';
+
+const quickContacts = [
+  {
+    icon: 'mail',
+    label: 'Email',
+    value: site.contact.email,
+    href: `mailto:${site.contact.email}`,
+    external: false,
+  },
+  {
+    icon: 'phone',
+    label: 'Teléfono / WhatsApp',
+    value: site.contact.phone,
+    href: site.contact.whatsappUrl,
+    external: true,
+  },
+  {
+    icon: 'map-pin',
+    label: 'Oficina',
+    value: `${site.contact.address.street}, ${site.contact.address.district}, ${site.contact.address.city}`,
+    href: null,
+    external: false,
+  },
+];
+---
+
+<section id="contacto" class="section-light py-24 lg:py-32 scroll-mt-20">
+  <div class="container-page">
+    <div class="grid gap-12 lg:gap-20 lg:grid-cols-[1fr_1.3fr]">
+      <!-- Texto y datos rápidos -->
+      <div class="lg:sticky lg:top-28 lg:self-start">
+        <Reveal>
+          <span class="text-eyebrow text-accent">Contacto</span>
+        </Reveal>
+        <Reveal delay={120}>
+          <h2 class="text-h2 mt-4 text-fg-light-1">
+            Conversemos sobre la seguridad
+            <span class="text-accent">de tu empresa.</span>
+          </h2>
+        </Reveal>
+        <Reveal delay={240}>
+          <p class="text-body-lg text-fg-light-2 mt-6">
+            ¿Deseas más información sobre nuestros servicios o quieres formar parte de Watchman?
+            Escribinos y te contactaremos a la brevedad.
+          </p>
+        </Reveal>
+
+        <Reveal delay={360}>
+          <ul class="mt-10 space-y-4">
+            {quickContacts.map((c) => (
+              <li>
+                {c.href ? (
+                  <a
+                    href={c.href}
+                    {...(c.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
+                    class="group flex items-start gap-4 p-4 -mx-4 rounded-xl hover:bg-black/[0.025] transition-colors"
+                  >
+                    <span class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent/10 text-accent group-hover:bg-accent group-hover:text-bg-dark transition-colors">
+                      <Icon name={`lucide:${c.icon}`} class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-xs uppercase tracking-[0.12em] text-fg-light-3 font-semibold">{c.label}</p>
+                      <p class="mt-1 text-fg-light-1 break-words">{c.value}</p>
+                    </div>
+                  </a>
+                ) : (
+                  <div class="flex items-start gap-4 p-4 -mx-4">
+                    <span class="flex-shrink-0 inline-flex items-center justify-center w-10 h-10 rounded-full bg-accent/10 text-accent">
+                      <Icon name={`lucide:${c.icon}`} class="h-5 w-5" aria-hidden="true" />
+                    </span>
+                    <div class="min-w-0">
+                      <p class="text-xs uppercase tracking-[0.12em] text-fg-light-3 font-semibold">{c.label}</p>
+                      <p class="mt-1 text-fg-light-1 break-words">{c.value}</p>
+                    </div>
+                  </div>
+                )}
+              </li>
+            ))}
+          </ul>
+        </Reveal>
+      </div>
+
+      <!-- Formulario -->
+      <Reveal delay={200}>
+        <div class="rounded-3xl border border-black/8 bg-bg-light-alt p-6 sm:p-10">
+          <ContactForm />
+        </div>
+      </Reveal>
+    </div>
+  </div>
+</section>

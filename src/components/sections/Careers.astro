@@ -1,0 +1,64 @@
+---
+import { Icon } from 'astro-icon/components';
+import Button from '../ui/Button.astro';
+import Reveal from '../ui/Reveal.astro';
+import { site } from '../../data/site.ts';
+
+// TODO: Si el cliente quiere un formulario más complejo con upload de CV, reemplazar el mailto con un endpoint propio.
+const mailtoCV = `mailto:${site.contact.email}?subject=Postulaci%C3%B3n%20-%20%5BTu%20nombre%5D&body=Hola%2C%20mi%20nombre%20es%20%5Btu%20nombre%5D.%20Adjunto%20mi%20CV%20para%20postular%20a%20oportunidades%20en%20Watchman.`;
+
+const traits = [
+  { icon: 'shield-check', label: 'Vocación de servicio' },
+  { icon: 'handshake', label: 'Compromiso y discreción' },
+  { icon: 'award', label: 'Estándares de excelencia' },
+];
+---
+
+<section id="carreras" class="section-dark py-24 lg:py-32 relative overflow-hidden isolate scroll-mt-20">
+  <div
+    aria-hidden="true"
+    class="absolute inset-0 -z-10 opacity-40"
+    style="background: radial-gradient(ellipse 50% 40% at 50% 50%, rgba(212, 160, 23, 0.05), transparent 70%);"
+  ></div>
+
+  <div class="container-page">
+    <div class="max-w-2xl mx-auto text-center">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Trabaja con nosotros</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4">
+          Únete al equipo
+          <span class="text-accent">Watchman.</span>
+        </h2>
+      </Reveal>
+      <Reveal delay={240}>
+        <p class="text-body-lg text-fg-dark-2 mt-6">
+          Buscamos profesionales con vocación de servicio, compromiso con la excelencia y un alto sentido de la confidencialidad para integrarse a nuestros equipos operativos y de asesoría.
+        </p>
+      </Reveal>
+
+      <Reveal delay={360}>
+        <ul class="mt-10 flex flex-wrap justify-center gap-3">
+          {traits.map((t) => (
+            <li class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-white/10 bg-white/[0.02] text-sm text-fg-dark-1">
+              <Icon name={`lucide:${t.icon}`} class="h-4 w-4 text-accent" aria-hidden="true" />
+              {t.label}
+            </li>
+          ))}
+        </ul>
+      </Reveal>
+
+      <Reveal delay={500}>
+        <div class="mt-10 inline-flex flex-col items-center">
+          <Button href={mailtoCV} variant="primary" size="lg" icon="mail" iconPosition="left">
+            Enviar CV
+          </Button>
+          <p class="mt-3 text-xs text-fg-dark-3">
+            Se abrirá tu cliente de correo. Email destino: {site.contact.email}
+          </p>
+        </div>
+      </Reveal>
+    </div>
+  </div>
+</section>

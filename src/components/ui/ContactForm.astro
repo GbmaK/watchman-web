@@ -1,0 +1,221 @@
+---
+import { Icon } from 'astro-icon/components';
+
+// TODO: Integrar con Resend
+// 1. pnpm add resend
+// 2. Crear endpoint en src/pages/api/contact.ts
+// 3. Variable de entorno RESEND_API_KEY
+// 4. Email destino: info@watchman.cl
+// 5. Reemplazar simulateSubmit() en el script con fetch a /api/contact
+---
+
+<form
+  id="contact-form"
+  novalidate
+  class="grid gap-5 sm:grid-cols-2"
+  aria-describedby="contact-form-status"
+>
+  <div class="field">
+    <label for="contact-nombre" class="field-label">Nombre</label>
+    <input
+      id="contact-nombre"
+      name="nombre"
+      type="text"
+      required
+      autocomplete="given-name"
+      class="field-input"
+    />
+  </div>
+
+  <div class="field">
+    <label for="contact-apellido" class="field-label">Apellido</label>
+    <input
+      id="contact-apellido"
+      name="apellido"
+      type="text"
+      required
+      autocomplete="family-name"
+      class="field-input"
+    />
+  </div>
+
+  <div class="field">
+    <label for="contact-correo" class="field-label">Correo</label>
+    <input
+      id="contact-correo"
+      name="correo"
+      type="email"
+      required
+      autocomplete="email"
+      class="field-input"
+    />
+  </div>
+
+  <div class="field">
+    <label for="contact-telefono" class="field-label">Teléfono</label>
+    <input
+      id="contact-telefono"
+      name="telefono"
+      type="tel"
+      required
+      autocomplete="tel"
+      placeholder="+56 9 ..."
+      class="field-input"
+    />
+  </div>
+
+  <div class="field sm:col-span-2">
+    <label for="contact-mensaje" class="field-label">Mensaje</label>
+    <textarea
+      id="contact-mensaje"
+      name="mensaje"
+      required
+      rows="5"
+      class="field-input resize-y min-h-32"
+    ></textarea>
+  </div>
+
+  <div class="sm:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
+    <p id="contact-form-status" class="text-sm min-h-5" aria-live="polite"></p>
+    <button
+      type="submit"
+      class="inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full
+        bg-accent text-bg-dark font-semibold transition-all duration-200
+        hover:bg-accent-hover hover:-translate-y-px
+        hover:shadow-[0_10px_30px_-10px_rgba(212,160,23,0.5)]
+        disabled:opacity-60 disabled:cursor-not-allowed disabled:hover:translate-y-0
+        focus-visible:outline-2 focus-visible:outline-offset-3 focus-visible:outline-accent"
+      data-submit
+    >
+      <span data-label-idle class="inline-flex items-center gap-2">
+        Enviar mensaje
+        <svg width="1em" height="1em" class="h-4 w-4" aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 2 11 13" /><path d="m22 2-7 20-4-9-9-4 20-7z" /></svg>
+      </span>
+      <span data-label-loading class="hidden items-center gap-2">
+        <svg class="h-4 w-4 animate-spin" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+          <circle cx="12" cy="12" r="10" stroke="currentColor" stroke-opacity="0.25" stroke-width="3"></circle>
+          <path d="M22 12a10 10 0 0 1-10 10" stroke="currentColor" stroke-width="3" stroke-linecap="round"></path>
+        </svg>
+        Enviando…
+      </span>
+    </button>
+  </div>
+</form>
+
+<style>
+  .field {
+    display: flex;
+    flex-direction: column;
+    gap: 0.4rem;
+  }
+  .field-label {
+    font-size: 0.78rem;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--fg-light-3);
+  }
+  .field-input {
+    width: 100%;
+    padding: 0.85rem 1rem;
+    background-color: #ffffff;
+    border: 1px solid var(--border-light);
+    border-radius: 0.75rem;
+    color: var(--fg-light-1);
+    font: inherit;
+    font-size: 0.95rem;
+    transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
+  }
+  .field-input::placeholder {
+    color: var(--fg-light-3);
+  }
+  .field-input:hover {
+    border-color: rgba(10, 11, 13, 0.18);
+  }
+  .field-input:focus {
+    outline: none;
+    border-color: var(--accent);
+    box-shadow: 0 0 0 4px var(--accent-soft);
+  }
+  .field-input[aria-invalid='true'] {
+    border-color: var(--error);
+    box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+  }
+
+  /* Loading state */
+  #contact-form[data-state='loading'] [data-label-idle] { display: none; }
+  #contact-form[data-state='loading'] [data-label-loading] { display: inline-flex; }
+
+  /* Status colors */
+  #contact-form-status[data-tone='success'] { color: var(--success); }
+  #contact-form-status[data-tone='error']   { color: var(--error); }
+</style>
+
+<script>
+  const init = () => {
+    const form = document.getElementById('contact-form') as HTMLFormElement | null;
+    if (!form || form.dataset.bound === 'true') return;
+    form.dataset.bound = 'true';
+
+    const status = document.getElementById('contact-form-status') as HTMLElement;
+    const submitBtn = form.querySelector('[data-submit]') as HTMLButtonElement;
+
+    const setStatus = (msg: string, tone: 'idle' | 'success' | 'error' = 'idle') => {
+      status.textContent = msg;
+      status.dataset.tone = tone;
+    };
+
+    const validate = () => {
+      let firstInvalid: HTMLElement | null = null;
+      const fields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+      fields.forEach((f) => {
+        const valid = f.checkValidity();
+        f.setAttribute('aria-invalid', valid ? 'false' : 'true');
+        if (!valid && !firstInvalid) firstInvalid = f;
+      });
+      if (firstInvalid) {
+        (firstInvalid as HTMLElement).focus();
+        setStatus('Revisá los campos marcados.', 'error');
+        return false;
+      }
+      return true;
+    };
+
+    // TODO: Reemplazar con fetch a /api/contact (Resend) cuando esté el backend.
+    const simulateSubmit = () =>
+      new Promise<void>((resolve) => window.setTimeout(resolve, 1500));
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      if (!validate()) return;
+
+      form.dataset.state = 'loading';
+      submitBtn.disabled = true;
+      setStatus('Enviando tu mensaje…', 'idle');
+
+      try {
+        await simulateSubmit();
+        form.dataset.state = 'success';
+        setStatus('¡Gracias! Recibimos tu mensaje. Te contactaremos a la brevedad.', 'success');
+        form.reset();
+      } catch (err) {
+        form.dataset.state = 'error';
+        setStatus('Hubo un problema. Intentá nuevamente o escribinos por WhatsApp.', 'error');
+      } finally {
+        submitBtn.disabled = false;
+      }
+    });
+
+    // Limpiar el aria-invalid al re-tipear
+    form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach((f) => {
+      f.addEventListener('input', () => {
+        if (f.getAttribute('aria-invalid') === 'true' && f.checkValidity()) {
+          f.setAttribute('aria-invalid', 'false');
+        }
+      });
+    });
+  };
+
+  init();
+  document.addEventListener('astro:page-load', init);
+</script>

@@ -1,0 +1,154 @@
+---
+import { Icon } from 'astro-icon/components';
+import Reveal from '../ui/Reveal.astro';
+
+// TODO: Confirmar con el cliente las regiones reales de cobertura.
+// Por ahora solo Región Metropolitana confirmada (Badajoz 100, Las Condes).
+// La lista completa permite marcar como activa cualquier región adicional cambiando `active: true`.
+
+interface Region {
+  code: string;
+  name: string;
+  yPercent: number; // posición vertical aproximada en el mapa (0 = norte, 100 = sur)
+  active: boolean;
+}
+
+const regions: Region[] = [
+  { code: 'XV', name: 'Arica y Parinacota',  yPercent: 3,  active: false },
+  { code: 'I',  name: 'Tarapacá',            yPercent: 8,  active: false },
+  { code: 'II', name: 'Antofagasta',         yPercent: 16, active: false },
+  { code: 'III',name: 'Atacama',             yPercent: 24, active: false },
+  { code: 'IV', name: 'Coquimbo',            yPercent: 31, active: false },
+  { code: 'V',  name: 'Valparaíso',          yPercent: 37, active: false },
+  { code: 'RM', name: 'Región Metropolitana',yPercent: 40, active: true  },
+  { code: 'VI', name: "O'Higgins",           yPercent: 43, active: false },
+  { code: 'VII',name: 'Maule',               yPercent: 47, active: false },
+  { code: 'XVI',name: 'Ñuble',               yPercent: 51, active: false },
+  { code: 'VIII',name:'Biobío',              yPercent: 55, active: false },
+  { code: 'IX', name: 'La Araucanía',        yPercent: 60, active: false },
+  { code: 'XIV',name: 'Los Ríos',            yPercent: 64, active: false },
+  { code: 'X',  name: 'Los Lagos',           yPercent: 70, active: false },
+  { code: 'XI', name: 'Aysén',               yPercent: 80, active: false },
+  { code: 'XII',name: 'Magallanes',          yPercent: 93, active: false },
+];
+
+const activeCount = regions.filter((r) => r.active).length;
+---
+
+<section class="section-light py-24 lg:py-32">
+  <div class="container-page">
+    <div class="max-w-3xl">
+      <Reveal>
+        <span class="text-eyebrow text-accent">Cobertura</span>
+      </Reveal>
+      <Reveal delay={120}>
+        <h2 class="text-h2 mt-4 text-fg-light-1">
+          Operación nacional
+          <span class="text-accent">a lo largo de Chile.</span>
+        </h2>
+      </Reveal>
+      <Reveal delay={240}>
+        <p class="text-body-lg text-fg-light-2 mt-6 max-w-2xl">
+          Sede central en Santiago, con capacidad operativa proyectada a las principales regiones del país.
+        </p>
+      </Reveal>
+    </div>
+
+    <div class="mt-16 grid gap-12 lg:gap-20 lg:grid-cols-[auto_1fr] items-start">
+      <!-- Mapa Chile estilizado -->
+      <Reveal>
+        <div class="relative mx-auto lg:mx-0 w-32 sm:w-40">
+          <svg
+            viewBox="0 0 100 500"
+            class="w-full h-auto"
+            role="img"
+            aria-label="Mapa estilizado de Chile con cobertura marcada"
+          >
+            <!-- Silueta simplificada de Chile -->
+            <path
+              d="M 50 10
+                 C 56 30, 58 60, 54 90
+                 C 50 130, 56 170, 52 210
+                 C 48 250, 56 290, 50 330
+                 C 44 370, 52 400, 46 430
+                 C 40 460, 48 480, 44 490
+                 L 36 488
+                 C 40 470, 32 440, 38 410
+                 C 44 380, 36 350, 42 320
+                 C 48 290, 40 260, 46 230
+                 C 52 200, 44 170, 50 140
+                 C 56 110, 48 80, 52 50
+                 C 54 30, 48 18, 50 10 Z"
+              fill="rgba(10, 11, 13, 0.04)"
+              stroke="rgba(10, 11, 13, 0.18)"
+              stroke-width="0.6"
+            />
+            <!-- Region markers -->
+            {regions.map((r) => (
+              <g>
+                {r.active ? (
+                  <>
+                    <circle cx="45" cy={r.yPercent * 4.8 + 10} r="6" fill="rgba(212, 160, 23, 0.18)" />
+                    <circle cx="45" cy={r.yPercent * 4.8 + 10} r="3" fill="#D4A017" />
+                  </>
+                ) : (
+                  <circle
+                    cx="45"
+                    cy={r.yPercent * 4.8 + 10}
+                    r="1.2"
+                    fill="rgba(10, 11, 13, 0.25)"
+                  />
+                )}
+              </g>
+            ))}
+          </svg>
+        </div>
+      </Reveal>
+
+      <!-- Lista regiones -->
+      <div>
+        <Reveal>
+          <div class="inline-flex items-center gap-2 text-xs font-semibold text-accent uppercase tracking-[0.15em]">
+            <span class="inline-block w-2 h-2 rounded-full bg-accent"></span>
+            {activeCount} {activeCount === 1 ? 'región confirmada' : 'regiones confirmadas'}
+          </div>
+        </Reveal>
+
+        <ul class="mt-6 grid gap-2 grid-cols-1 sm:grid-cols-2">
+          {regions.map((r, i) => (
+            <Reveal delay={i * 20}>
+              <li
+                class:list={[
+                  'flex items-center gap-3 px-4 py-3 rounded-lg border text-sm transition-colors',
+                  r.active
+                    ? 'border-accent/40 bg-accent/5 text-fg-light-1'
+                    : 'border-black/8 text-fg-light-3',
+                ]}
+              >
+                <span
+                  class:list={[
+                    'inline-flex items-center justify-center w-7 h-7 rounded-md text-[0.7rem] font-mono font-semibold',
+                    r.active ? 'bg-accent text-bg-dark' : 'bg-black/5 text-fg-light-3',
+                  ]}
+                >
+                  {r.code}
+                </span>
+                <span class={r.active ? 'font-medium' : ''}>{r.name}</span>
+                {r.active && (
+                  <Icon name="lucide:check" class="h-4 w-4 text-accent ml-auto" aria-hidden="true" />
+                )}
+              </li>
+            </Reveal>
+          ))}
+        </ul>
+
+        <Reveal delay={400}>
+          <p class="mt-6 text-xs text-fg-light-3 inline-flex items-center gap-2">
+            <Icon name="lucide:info" class="h-3.5 w-3.5" aria-hidden="true" />
+            Lista preliminar. El cliente confirmará la cobertura definitiva.
+          </p>
+        </Reveal>
+      </div>
+    </div>
+  </div>
+</section>
