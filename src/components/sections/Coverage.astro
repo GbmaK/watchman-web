@@ -35,14 +35,14 @@ const regions: Region[] = [
 const activeCount = regions.filter((r) => r.active).length;
 ---
 
-<section class="section-light py-24 lg:py-32">
+<section aria-labelledby="coverage-heading" class="section-light py-24 lg:py-32">
   <div class="container-page">
     <div class="max-w-3xl">
       <Reveal>
         <span class="text-eyebrow text-accent">Cobertura</span>
       </Reveal>
       <Reveal delay={120}>
-        <h2 class="text-h2 mt-4 text-fg-light-1">
+        <h2 id="coverage-heading" class="text-h2 mt-4 text-fg-light-1">
           Operación nacional
           <span class="text-accent">a lo largo de Chile.</span>
         </h2>

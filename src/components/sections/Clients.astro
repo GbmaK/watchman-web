@@ -4,14 +4,14 @@ import Reveal from '../ui/Reveal.astro';
 import { clients } from '../../data/clients.ts';
 ---
 
-<section id="clientes" class="section-light py-24 lg:py-32 scroll-mt-20">
+<section id="clientes" aria-labelledby="clientes-heading" class="section-light py-24 lg:py-32 scroll-mt-20">
   <div class="container-page">
     <div class="max-w-3xl">
       <Reveal>
         <span class="text-eyebrow text-accent">Referencias</span>
       </Reveal>
       <Reveal delay={120}>
-        <h2 class="text-h2 mt-4 text-fg-light-1">
+        <h2 id="clientes-heading" class="text-h2 mt-4 text-fg-light-1">
           Ellos confían en <span class="text-accent">Watchman</span>.
         </h2>
       </Reveal>

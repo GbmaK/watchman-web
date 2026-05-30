@@ -1,85 +1,78 @@
 ---
-import { Icon } from 'astro-icon/components';
-
 // TODO: Integrar con Resend
 // 1. pnpm add resend
 // 2. Crear endpoint en src/pages/api/contact.ts
 // 3. Variable de entorno RESEND_API_KEY
 // 4. Email destino: info@watchman.cl
 // 5. Reemplazar simulateSubmit() en el script con fetch a /api/contact
+
+interface Field {
+  id: string;
+  name: string;
+  label: string;
+  type: 'text' | 'email' | 'tel' | 'textarea';
+  required: boolean;
+  autocomplete?: string;
+  placeholder?: string;
+  errorMessage: string;
+  colSpan?: 1 | 2;
+}
+
+const fields: Field[] = [
+  { id: 'contact-nombre',  name: 'nombre',  label: 'Nombre',   type: 'text',  required: true, autocomplete: 'given-name',  errorMessage: 'Ingresá tu nombre.' },
+  { id: 'contact-apellido',name: 'apellido',label: 'Apellido', type: 'text',  required: true, autocomplete: 'family-name', errorMessage: 'Ingresá tu apellido.' },
+  { id: 'contact-correo',  name: 'correo',  label: 'Correo',   type: 'email', required: true, autocomplete: 'email',       errorMessage: 'Ingresá un correo válido (ej: nombre@empresa.cl).' },
+  { id: 'contact-telefono',name: 'telefono',label: 'Teléfono', type: 'tel',   required: true, autocomplete: 'tel', placeholder: '+56 9 ...', errorMessage: 'Ingresá un teléfono de contacto.' },
+  { id: 'contact-mensaje', name: 'mensaje', label: 'Mensaje',  type: 'textarea', required: true, errorMessage: 'Contanos brevemente cómo podemos ayudarte.', colSpan: 2 },
+];
 ---
 
 <form
   id="contact-form"
   novalidate
   class="grid gap-5 sm:grid-cols-2"
-  aria-describedby="contact-form-status"
+  aria-labelledby="contact-form-title"
 >
-  <div class="field">
-    <label for="contact-nombre" class="field-label">Nombre</label>
-    <input
-      id="contact-nombre"
-      name="nombre"
-      type="text"
-      required
-      autocomplete="given-name"
-      class="field-input"
-    />
-  </div>
+  <h3 id="contact-form-title" class="sr-only">Formulario de contacto</h3>
 
-  <div class="field">
-    <label for="contact-apellido" class="field-label">Apellido</label>
-    <input
-      id="contact-apellido"
-      name="apellido"
-      type="text"
-      required
-      autocomplete="family-name"
-      class="field-input"
-    />
-  </div>
-
-  <div class="field">
-    <label for="contact-correo" class="field-label">Correo</label>
-    <input
-      id="contact-correo"
-      name="correo"
-      type="email"
-      required
-      autocomplete="email"
-      class="field-input"
-    />
-  </div>
-
-  <div class="field">
-    <label for="contact-telefono" class="field-label">Teléfono</label>
-    <input
-      id="contact-telefono"
-      name="telefono"
-      type="tel"
-      required
-      autocomplete="tel"
-      placeholder="+56 9 ..."
-      class="field-input"
-    />
-  </div>
-
-  <div class="field sm:col-span-2">
-    <label for="contact-mensaje" class="field-label">Mensaje</label>
-    <textarea
-      id="contact-mensaje"
-      name="mensaje"
-      required
-      rows="5"
-      class="field-input resize-y min-h-32"
-    ></textarea>
-  </div>
+  {fields.map((f) => (
+    <div class:list={['field', f.colSpan === 2 && 'sm:col-span-2']}>
+      <label for={f.id} class="field-label">
+        {f.label}
+        {f.required && <span class="text-error" aria-hidden="true"> *</span>}
+      </label>
+      {f.type === 'textarea' ? (
+        <textarea
+          id={f.id}
+          name={f.name}
+          required={f.required}
+          rows="5"
+          aria-required={f.required ? 'true' : 'false'}
+          aria-describedby={`${f.id}-error`}
+          class="field-input resize-y min-h-32"
+        ></textarea>
+      ) : (
+        <input
+          id={f.id}
+          name={f.name}
+          type={f.type}
+          required={f.required}
+          autocomplete={f.autocomplete}
+          placeholder={f.placeholder}
+          aria-required={f.required ? 'true' : 'false'}
+          aria-describedby={`${f.id}-error`}
+          class="field-input"
+        />
+      )}
+      <p id={`${f.id}-error`} class="field-error" data-error-for={f.id} data-error-msg={f.errorMessage}></p>
+    </div>
+  ))}
 
   <div class="sm:col-span-2 flex flex-col sm:flex-row sm:items-center justify-between gap-4 mt-2">
-    <p id="contact-form-status" class="text-sm min-h-5" aria-live="polite"></p>
+    <p id="contact-form-status" class="text-sm min-h-5" role="status" aria-live="polite"></p>
     <button
       type="submit"
-      class="inline-flex items-center justify-center gap-2 h-12 px-7 rounded-full
+      class="inline-flex items-center justify-center gap-2 min-h-12 px-7 rounded-full
         bg-accent text-bg-dark font-semibold transition-all duration-200
         hover:bg-accent-hover hover:-translate-y-px
         hover:shadow-[0_10px_30px_-10px_rgba(212,160,23,0.5)]
@@ -118,6 +111,7 @@ import { Icon } from 'astro-icon/components';
   .field-input {
     width: 100%;
     padding: 0.85rem 1rem;
+    min-height: 2.75rem; /* 44px target */
     background-color: #ffffff;
     border: 1px solid var(--border-light);
     border-radius: 0.75rem;
@@ -126,12 +120,8 @@ import { Icon } from 'astro-icon/components';
     font-size: 0.95rem;
     transition: border-color 200ms ease, box-shadow 200ms ease, background-color 200ms ease;
   }
-  .field-input::placeholder {
-    color: var(--fg-light-3);
-  }
-  .field-input:hover {
-    border-color: rgba(10, 11, 13, 0.18);
-  }
+  .field-input::placeholder { color: var(--fg-light-3); }
+  .field-input:hover { border-color: rgba(10, 11, 13, 0.18); }
   .field-input:focus {
     outline: none;
     border-color: var(--accent);
@@ -140,6 +130,18 @@ import { Icon } from 'astro-icon/components';
   .field-input[aria-invalid='true'] {
     border-color: var(--error);
     box-shadow: 0 0 0 4px rgba(239, 68, 68, 0.1);
+  }
+  .field-error {
+    min-height: 1rem;
+    font-size: 0.78rem;
+    color: var(--error);
+    opacity: 0;
+    transform: translateY(-2px);
+    transition: opacity 180ms ease, transform 180ms ease;
+  }
+  .field-error[data-shown='true'] {
+    opacity: 1;
+    transform: translateY(0);
   }
 
   /* Loading state */
@@ -165,19 +167,54 @@ import { Icon } from 'astro-icon/components';
       status.dataset.tone = tone;
     };
 
+    const errorFor = (input: HTMLInputElement | HTMLTextAreaElement) =>
+      document.querySelector<HTMLElement>(`[data-error-for="${input.id}"]`);
+
+    const showError = (input: HTMLInputElement | HTMLTextAreaElement) => {
+      input.setAttribute('aria-invalid', 'true');
+      const err = errorFor(input);
+      if (err) {
+        err.textContent = err.dataset.errorMsg ?? 'Campo inválido.';
+        err.dataset.shown = 'true';
+      }
+    };
+
+    const clearError = (input: HTMLInputElement | HTMLTextAreaElement) => {
+      input.setAttribute('aria-invalid', 'false');
+      const err = errorFor(input);
+      if (err) {
+        err.textContent = '';
+        err.dataset.shown = 'false';
+      }
+    };
+
     const validate = () => {
-      let firstInvalid: HTMLElement | null = null;
       const fields = form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea');
+      let firstInvalid: HTMLElement | null = null;
+      let invalidCount = 0;
+
       fields.forEach((f) => {
         const valid = f.checkValidity();
-        f.setAttribute('aria-invalid', valid ? 'false' : 'true');
-        if (!valid && !firstInvalid) firstInvalid = f;
+        if (valid) {
+          clearError(f);
+        } else {
+          showError(f);
+          invalidCount++;
+          if (!firstInvalid) firstInvalid = f;
+        }
       });
+
       if (firstInvalid) {
         (firstInvalid as HTMLElement).focus();
-        setStatus('Revisá los campos marcados.', 'error');
+        setStatus(
+          invalidCount === 1
+            ? 'Revisá el campo marcado.'
+            : `Revisá los ${invalidCount} campos marcados.`,
+          'error'
+        );
         return false;
       }
+      setStatus('', 'idle');
       return true;
     };
 
@@ -198,6 +235,7 @@ import { Icon } from 'astro-icon/components';
         form.dataset.state = 'success';
         setStatus('¡Gracias! Recibimos tu mensaje. Te contactaremos a la brevedad.', 'success');
         form.reset();
+        form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach(clearError);
       } catch (err) {
         form.dataset.state = 'error';
         setStatus('Hubo un problema. Intentá nuevamente o escribinos por WhatsApp.', 'error');
@@ -206,12 +244,14 @@ import { Icon } from 'astro-icon/components';
       }
     });
 
-    // Limpiar el aria-invalid al re-tipear
+    // Limpiar errores al re-tipear / blur sobre campo válido
     form.querySelectorAll<HTMLInputElement | HTMLTextAreaElement>('input, textarea').forEach((f) => {
-      f.addEventListener('input', () => {
-        if (f.getAttribute('aria-invalid') === 'true' && f.checkValidity()) {
-          f.setAttribute('aria-invalid', 'false');
-        }
+      const onCheck = () => { if (f.checkValidity()) clearError(f); };
+      f.addEventListener('input', onCheck);
+      f.addEventListener('blur', () => {
+        if (!f.value && !f.required) return;
+        if (f.checkValidity()) clearError(f);
+        else if (f.value.length > 0) showError(f);
       });
     });
   };

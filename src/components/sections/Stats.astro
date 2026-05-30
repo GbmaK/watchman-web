@@ -4,7 +4,7 @@ import StatCard from '../ui/StatCard.astro';
 import { stats, statsSource } from '../../data/stats.ts';
 ---
 
-<section class="section-dark relative overflow-hidden isolate py-24 lg:py-32">
+<section aria-labelledby="stats-heading" class="section-dark relative overflow-hidden isolate py-24 lg:py-32">
   <!-- Subtle background accents -->
   <div
     aria-hidden="true"
@@ -18,7 +18,7 @@ import { stats, statsSource } from '../../data/stats.ts';
         <span class="text-eyebrow text-accent">El contexto</span>
       </Reveal>
       <Reveal delay={120}>
-        <h2 class="text-h2 mt-4">
+        <h2 id="stats-heading" class="text-h2 mt-4">
           El riesgo es real.
           <span class="block text-fg-dark-2">La respuesta debe serlo también.</span>
         </h2>

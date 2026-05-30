@@ -4,7 +4,7 @@ import ServiceCard from '../ui/ServiceCard.astro';
 import { services } from '../../data/services.ts';
 ---
 
-<section id="servicios" class="section-dark relative overflow-hidden isolate py-24 lg:py-32 scroll-mt-20">
+<section id="servicios" aria-labelledby="servicios-heading" class="section-dark relative overflow-hidden isolate py-24 lg:py-32 scroll-mt-20">
   <!-- Background ambient -->
   <div
     aria-hidden="true"
@@ -18,7 +18,7 @@ import { services } from '../../data/services.ts';
         <span class="text-eyebrow text-accent">Nuestros servicios</span>
       </Reveal>
       <Reveal delay={120}>
-        <h2 class="text-h2 mt-4">
+        <h2 id="servicios-heading" class="text-h2 mt-4">
           Cobertura integral, desde la seguridad física
           <span class="text-accent"> hasta la inteligencia.</span>
         </h2>

@@ -97,6 +97,14 @@ body {
   border-radius: 2px;
 }
 
+/* WCAG 2.4.11 — el elemento con foco no debe quedar oculto por el header sticky.
+   scroll-padding-top en :root + scroll-margin en cualquier elemento que reciba foco. */
+:focus,
+:target {
+  scroll-margin-top: 96px;
+  scroll-margin-bottom: 32px;
+}
+
 /* ---------- Typography utilities ---------- */
 .text-display {
   font-size: clamp(2.5rem, 6vw, 5rem);

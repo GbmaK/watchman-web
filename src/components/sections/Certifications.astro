@@ -4,7 +4,7 @@ import Reveal from '../ui/Reveal.astro';
 import { certifications } from '../../data/certifications.ts';
 ---
 
-<section class="section-dark py-24 lg:py-32 relative overflow-hidden isolate">
+<section aria-labelledby="certs-heading" class="section-dark py-24 lg:py-32 relative overflow-hidden isolate">
   <div
     aria-hidden="true"
     class="absolute inset-0 -z-10 opacity-30"
@@ -17,7 +17,7 @@ import { certifications } from '../../data/certifications.ts';
         <span class="text-eyebrow text-accent">Acreditaciones</span>
       </Reveal>
       <Reveal delay={120}>
-        <h2 class="text-h2 mt-4">
+        <h2 id="certs-heading" class="text-h2 mt-4">
           Respaldados por estándares
           <span class="text-accent">nacionales e internacionales.</span>
         </h2>

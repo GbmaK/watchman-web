@@ -22,35 +22,77 @@ const {
 const canonical = new URL(Astro.url.pathname, site.url).toString();
 const ogImageUrl = new URL(ogImage, site.url).toString();
 
-// JSON-LD structured data — SecurityService
+const logoUrl = new URL('/favicon.svg', site.url).toString();
+
+// JSON-LD con @graph — entidades referenciadas entre sí.
+// Organization es la entidad canónica para Knowledge Panel de Google;
+// SecurityService precisa la categoría de negocio; WebSite habilita SearchAction.
+const orgId = `${site.url}#organization`;
+const siteId = `${site.url}#website`;
+
 const jsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'SecurityService',
-  name: site.name,
-  alternateName: site.shortName,
-  description: site.description,
-  url: site.url,
-  telephone: site.contact.phone,
-  email: site.contact.email,
-  foundingDate: String(site.foundedYear),
-  address: {
-    '@type': 'PostalAddress',
-    streetAddress: site.contact.address.street,
-    addressLocality: site.contact.address.district,
-    addressRegion: 'Región Metropolitana',
-    addressCountry: site.contact.address.countryCode,
-  },
-  areaServed: {
-    '@type': 'Country',
-    name: 'Chile',
-  },
-  contactPoint: {
-    '@type': 'ContactPoint',
-    telephone: site.contact.phone,
-    email: site.contact.email,
-    contactType: 'customer service',
-    availableLanguage: ['Spanish'],
-  },
+  '@graph': [
+    {
+      '@type': 'Organization',
+      '@id': orgId,
+      name: site.name,
+      alternateName: site.shortName,
+      url: site.url,
+      logo: {
+        '@type': 'ImageObject',
+        url: logoUrl,
+        width: '64',
+        height: '64',
+      },
+      foundingDate: String(site.foundedYear),
+      address: {
+        '@type': 'PostalAddress',
+        streetAddress: site.contact.address.street,
+        addressLocality: site.contact.address.district,
+        addressRegion: 'Región Metropolitana',
+        addressCountry: site.contact.address.countryCode,
+      },
+      contactPoint: {
+        '@type': 'ContactPoint',
+        telephone: site.contact.phone,
+        email: site.contact.email,
+        contactType: 'customer service',
+        areaServed: 'CL',
+        availableLanguage: ['Spanish'],
+      },
+      // TODO: agregar sameAs con URLs de redes sociales cuando el cliente las provea.
+      // sameAs: ['https://www.linkedin.com/company/...', 'https://www.instagram.com/...'],
+    },
+    {
+      '@type': 'SecurityService',
+      '@id': `${site.url}#service`,
+      name: site.name,
+      provider: { '@id': orgId },
+      description: site.description,
+      url: site.url,
+      areaServed: { '@type': 'Country', name: 'Chile' },
+      serviceType: [
+        'Seguridad física',
+        'Seguridad electrónica',
+        'Investigación de antecedentes',
+        'Análisis de inteligencia',
+        'Asesoría de manejo de crisis',
+        'Protección de personas importantes',
+        'Análisis integral de riesgo',
+        'Diseño de Salas SOC',
+        'Estudios de contra inteligencia',
+      ],
+    },
+    {
+      '@type': 'WebSite',
+      '@id': siteId,
+      url: site.url,
+      name: site.name,
+      inLanguage: site.locale,
+      publisher: { '@id': orgId },
+    },
+  ],
 };
 ---
 
@@ -64,6 +106,10 @@ const jsonLd = {
     <title>{title}</title>
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+
+    <!-- Indexación explícita + permisos de rich preview -->
+    <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1" />
+    <meta name="googlebot" content="index, follow, max-snippet:-1, max-image-preview:large" />
 
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
 
@@ -90,7 +136,7 @@ const jsonLd = {
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImageUrl} />
 
-    <script type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(jsonLd)} />
   </head>
   <body class="bg-bg-light text-fg-light-1 font-sans antialiased">
     <a

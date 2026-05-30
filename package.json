@@ -9,6 +9,8 @@
     "dev": "astro dev",
     "build": "astro build",
     "preview": "astro preview",
+    "check": "astro check",
+    "sync": "astro sync",
     "astro": "astro"
   },
   "dependencies": {
@@ -20,5 +22,9 @@
     "astro-icon": "^1.1.5",
     "sharp": "^0.34.5",
     "tailwindcss": "^4.3.0"
+  },
+  "devDependencies": {
+    "@astrojs/check": "^0.9.9",
+    "typescript": "^6.0.3"
   }
 }

@@ -4,7 +4,7 @@ import Reveal from '../ui/Reveal.astro';
 import { team } from '../../data/team.ts';
 ---
 
-<section class="section-dark py-24 lg:py-32 relative overflow-hidden isolate">
+<section aria-labelledby="team-heading" class="section-dark py-24 lg:py-32 relative overflow-hidden isolate">
   <div
     aria-hidden="true"
     class="absolute inset-0 -z-10 opacity-30"
@@ -17,7 +17,7 @@ import { team } from '../../data/team.ts';
         <span class="text-eyebrow text-accent">Liderazgo</span>
       </Reveal>
       <Reveal delay={120}>
-        <h2 class="text-h2 mt-4">
+        <h2 id="team-heading" class="text-h2 mt-4">
           Quienes están detrás
           <span class="text-accent">de Watchman.</span>
         </h2>

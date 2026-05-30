@@ -69,7 +69,7 @@ const footerNav = [
 
       <!-- Navegación + Empresa -->
       {footerNav.map((col) => (
-        <div>
+        <nav aria-label={`Footer — ${col.title}`}>
           <h3 class="text-eyebrow text-fg-dark-3 mb-5">{col.title}</h3>
           <ul class="space-y-3 text-sm">
             {col.links.map((link) => (
@@ -77,14 +77,14 @@ const footerNav = [
                 <a
                   href={link.href}
                   {...('external' in link && link.external ? { target: '_blank', rel: 'noopener noreferrer' } : {})}
-                  class="text-fg-dark-2 hover:text-accent transition-colors"
+                  class="inline-flex items-center min-h-11 text-fg-dark-2 hover:text-accent transition-colors"
                 >
                   {link.label}
                 </a>
               </li>
             ))}
           </ul>
-        </div>
+        </nav>
       ))}
     </div>
 
